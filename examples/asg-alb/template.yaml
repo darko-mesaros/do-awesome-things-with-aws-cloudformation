@@ -440,23 +440,23 @@ Resources:
       MaxSize: '3'
       TargetGroupARNs:
         - !Ref 'ALBTargetGroup'
-      NotificationConfiguration:
-        TopicARN: !Ref 'NotificationTopic'
-        NotificationTypes:
-          - autoscaling:EC2_INSTANCE_LAUNCH
-          - autoscaling:EC2_INSTANCE_LAUNCH_ERROR
-          - autoscaling:EC2_INSTANCE_TERMINATE
-          - autoscaling:EC2_INSTANCE_TERMINATE_ERROR
+      NotificationConfigurations:
+        - TopicARN: !Ref 'NotificationTopic'
+          NotificationTypes:
+            - autoscaling:EC2_INSTANCE_LAUNCH
+            - autoscaling:EC2_INSTANCE_LAUNCH_ERROR
+            - autoscaling:EC2_INSTANCE_TERMINATE
+            - autoscaling:EC2_INSTANCE_TERMINATE_ERROR
     CreationPolicy:
       ResourceSignal:
         Timeout: PT15M
         Count: '1'
     UpdatePolicy:
       AutoScalingRollingUpdate:
-        MinInstancesInService: '1'
-        MaxBatchSize: '1'
+        MinInstancesInService: 1
+        MaxBatchSize: 1
         PauseTime: PT15M
-        WaitOnResourceSignals: 'true'
+        WaitOnResourceSignals: true
   LaunchConfig:
     Type: AWS::AutoScaling::LaunchConfiguration
     Metadata:
@@ -556,14 +556,14 @@ Resources:
       AdjustmentType: ChangeInCapacity
       AutoScalingGroupName: !Ref 'WebServerGroup'
       Cooldown: '60'
-      ScalingAdjustment: '1'
+      ScalingAdjustment: 1
   WebServerScaleDownPolicy:
     Type: AWS::AutoScaling::ScalingPolicy
     Properties:
       AdjustmentType: ChangeInCapacity
       AutoScalingGroupName: !Ref 'WebServerGroup'
       Cooldown: '60'
-      ScalingAdjustment: '-1'
+      ScalingAdjustment: -1
   CPUAlarmHigh:
     Type: AWS::CloudWatch::Alarm
     Properties:
@@ -571,9 +571,9 @@ Resources:
       MetricName: CPUUtilization
       Namespace: AWS/EC2
       Statistic: Average
-      Period: '300'
-      EvaluationPeriods: '2'
-      Threshold: '90'
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 90
       AlarmActions:
         - !Ref 'WebServerScaleUpPolicy'
       Dimensions:
@@ -587,9 +587,9 @@ Resources:
       MetricName: CPUUtilization
       Namespace: AWS/EC2
       Statistic: Average
-      Period: '300'
-      EvaluationPeriods: '2'
-      Threshold: '70'
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 70
       AlarmActions:
         - !Ref 'WebServerScaleDownPolicy'
       Dimensions:
@@ -607,7 +607,7 @@ Resources:
         - Type: forward
           TargetGroupArn: !Ref 'ALBTargetGroup'
       LoadBalancerArn: !Ref 'ApplicationLoadBalancer'
-      Port: '80'
+      Port: 80
       Protocol: HTTP
   ALBTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
@@ -625,12 +625,12 @@ Resources:
       GroupDescription: Enable SSH access and HTTP from the load balancer only
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: '22'
-          ToPort: '22'
+          FromPort: 22
+          ToPort: 22
           CidrIp: !Ref 'SSHLocation'
         - IpProtocol: tcp
-          FromPort: '80'
-          ToPort: '80'
+          FromPort: 80
+          ToPort: 80
           SourceSecurityGroupId: !Select
             - 0
             - !GetAtt 'ApplicationLoadBalancer.SecurityGroups'
