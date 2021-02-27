@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >
+  Launching a single EC2 instance depending on the parameters entered.
+Transform: AWS::Serverless-2016-10-31
+Parameters:
+  InstanceType:
+    Type: String
+    Default: t3.micro
+    AllowedValues: 
+      - t3.micro
+      - t3.small
+      - a1.medium
+      - a1.large
+    Description: Please select the EC2 instance size (can be t3 micro/small or a1 medium/large)
+  KeyPair:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: The keypair to be used to access your EC2 instances.
+Mappings: 
+  AMIRegionMap:
+    us-west-2:
+      "HVM64": "ami-0ce21b51cb31a48b8"
+      "HVMG2": "ami-081c3775f479265ea"
+    eu-west-1:
+      "HVM64": "ami-04d5cc9b88f9d1d39"
+      "HVMG2": "ami-049456450f2873c0a"
+Conditions:
+  CreateARMResources: 
+    !Or [!Equals [!Ref InstanceType, 'a1.medium'], !Equals [!Ref InstanceType, 'a1.large']]
+  CreateX86Resources: 
+    !Or [!Equals [!Ref InstanceType, 't3.micro'], !Equals [!Ref InstanceType, 't3.small']]
+Resources:
+  MyEc2InstanceX86:
+    Type: "AWS::EC2::Instance"
+    Condition: CreateX86Resources
+    Properties:
+      ImageId: !FindInMap [AMIRegionMap, !Ref "AWS::Region", HVM64]
+      InstanceType:
+        Ref: InstanceType
+  MyEc2InstanceARM:
+    Type: "AWS::EC2::Instance"
+    Condition: CreateARMResources
+    Properties:
+      ImageId: !FindInMap [AMIRegionMap, !Ref "AWS::Region", HVMG2]
+      InstanceType:
+        Ref: InstanceType

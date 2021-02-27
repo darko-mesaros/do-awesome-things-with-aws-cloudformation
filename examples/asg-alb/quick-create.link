@@ -1,0 +1,2 @@
+https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/quickcreate?templateUrl=https%3A%2F%2Fs3-eu-west-1.amazonaws.com%2Fcf-templates-1j9jcfk5s5ik8-eu-west-1%2F20210566vJ-template.yaml&stackName=SAMPLE-Asg-Alb&param_InstanceType=t2.small&param_KeyName=darko-eu-west-1&param_OperatorEMail=d%40rko.rs&param_SSHLocation=0.0.0.0%2F0&param_Subnets%5B%5D=subnet-8b7a6cfc&param_Subnets%5B%5D=subnet-84dbf9dd&param_VpcId=vpc-70e2dc15
+
