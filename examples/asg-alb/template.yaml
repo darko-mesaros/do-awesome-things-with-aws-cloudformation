@@ -470,12 +470,8 @@ Resources:
             /var/www/html/index.html:
               content: !Join
                 - "\n"
-                - - <img src="
-                  - !FindInMap
-                    - Region2Examples
-                    - !Ref 'AWS::Region'
-                    - Examples
-                  - /cloudformation_graphic.png" alt="AWS CloudFormation Logo"/>
+                - - <h1>Hello there Accra! I hope you are doing fine this morning!</h1>
+                  - <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Flag_of_Ghana.svg/640px-Flag_of_Ghana.svg.png" alt="AWS CloudFormation Logo"/>
                   - <h1>Congratulations, you have successfully launched the AWS CloudFormation
                     sample.</h1>
               mode: '000644'
